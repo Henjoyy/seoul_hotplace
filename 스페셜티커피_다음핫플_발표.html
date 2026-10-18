@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다음 서울 핫플 · 스페셜티 커피</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6efe4; --paper:#fffaf2; --ink:#2a1c13; --ink2:#5b4636; --ink3:#8a7563;
+  --line:#e2d3bd; --latte:#ecdcc4; --crema:#c58a52; --crema-d:#9a6232; --espresso:#2a1c13;
+  --leaf:#5c6b3a; --leaf-bg:#e7ead6; --berry:#a8442f; --berry-bg:#f3ddd5;
+  --serif:'Noto Serif KR','Nanum Myeongjo','Batang',serif; --sans:'Noto Sans KR','Pretendard','Malgun Gothic',sans-serif;
+  --s:1;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:#e6d8c1;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+.stage{position:fixed;inset:0}
+.deck{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--s));transform-origin:center;background:var(--bg);box-shadow:0 20px 60px -20px rgba(42,28,19,.45);overflow:hidden}
+.slide{position:absolute;inset:0;padding:40px 60px 52px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .25s ease;font-size:15px;line-height:1.55}
+.slide.on{opacity:1;visibility:visible}
+.slide.alt{background:linear-gradient(180deg,#f3e9d9,#f6efe4)}
+h1,h2,h3{font-family:var(--serif);margin:0;line-height:1.25;color:var(--ink)}
+h1{font-size:56px;font-weight:900} h2{font-size:32px;font-weight:900;margin:0 0 8px} h3{font-size:18px;font-weight:700}
+p{margin:0}
+.kicker{font-size:12.5px;letter-spacing:.18em;font-weight:700;color:var(--crema-d);margin:0 0 8px;display:flex;align-items:center;gap:10px}
+.kicker .num{font-family:var(--serif);font-size:14px;background:var(--espresso);color:var(--bg);border-radius:999px;padding:1px 12px;letter-spacing:.06em}
+.lead{font-size:16px;color:var(--ink2);max-width:1040px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 20px;box-shadow:0 10px 26px -18px rgba(42,28,19,.35)}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.tag{display:inline-block;font-size:12.5px;padding:2px 10px;border-radius:999px;background:var(--leaf-bg);color:var(--leaf);border:1px solid #cfd6b3;font-weight:500}
+.tag.mid{background:var(--latte);color:var(--crema-d);border-color:#dcc6a6}
+.muted{color:var(--ink3);font-size:13px}
+.big{font-family:var(--serif);font-weight:900;font-size:40px;line-height:1.1}
+hr.s{border:0;border-top:1px solid var(--line);margin:10px 0}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
+/* cover */
+.cover{background:radial-gradient(900px 500px at 85% 20%,#e9d3b3 0,transparent 60%),var(--bg);justify-content:center}
+.cover h1 em{font-style:normal;color:var(--crema-d)}
+.cup{position:absolute;right:70px;bottom:90px;width:330px}
+.meta{display:flex;gap:8px;margin-top:22px}
+/* agenda */
+.agenda{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:0 24px}
+.arow{display:grid;grid-template-columns:48px 240px 1fr;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer;color:inherit;text-decoration:none}
+.arow:last-child{border-bottom:0}
+.arow .n{font-family:var(--serif);font-weight:900;font-size:20px}
+.arow:nth-child(1) .n{color:#2f7a86}.arow:nth-child(2) .n{color:#6b4fc9}.arow:nth-child(3) .n{color:#a87432}.arow:nth-child(4) .n{color:#2f6a4a}.arow:nth-child(5) .n{color:var(--berry)}
+.arow .t{font-family:var(--serif);font-size:22px;font-weight:700}.arow .d{color:var(--ink2);font-size:14.5px}
+.arow:hover{background:#fbf2e3}
+.refs{display:flex;gap:6px 22px;color:var(--ink2);font-size:13px}
+.refs span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--crema);margin-right:8px;vertical-align:middle}
+/* definition */
+.defbox{background:var(--espresso);color:#f6efe4;border-radius:16px;padding:16px 24px}
+.defbox .lab{font-size:11.5px;letter-spacing:.2em;color:#d9b88f;font-weight:700}
+.defbox p{font-family:var(--serif);font-size:21px;font-weight:700;line-height:1.45;margin-top:4px}.defbox b{color:#f1c58f}
+.ind .no{font-family:var(--serif);font-weight:900;color:var(--crema-d);font-size:13px}.ind h3{margin:0 0 4px;font-size:16.5px}
+.ind .why{font-size:13px;color:var(--ink2);line-height:1.5}.ind .src{margin-top:6px;font-size:11.5px;color:var(--ink3)}
+/* tabs */
+.tabs{display:inline-flex;gap:4px;background:var(--latte);padding:4px;border-radius:999px;align-self:flex-start}
+.tabs button{border:0;background:transparent;font:inherit;font-weight:700;font-size:13.5px;color:var(--ink2);padding:5px 14px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--espresso);color:var(--bg)}
+/* heat grid */
+.hm{display:grid;grid-template-columns:132px repeat(3,1fr);gap:6px}
+.hm .h{font-size:12px;letter-spacing:.14em;font-weight:700;color:var(--crema-d);padding:0 4px}
+.hm .rowl{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700;display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.hm .rowl small{font-weight:400;color:var(--ink3);font-size:11px}
+.cell{border-radius:10px;padding:7px 11px;border:1px solid var(--line);height:80px;display:flex;flex-direction:column;justify-content:center;gap:5px;font-size:12px}
+.cell.empty{background:repeating-linear-gradient(135deg,#f3e9d9,#f3e9d9 8px,#efe2cd 8px,#efe2cd 16px);color:var(--ink3);border-style:dashed;line-height:1.35}
+.mr{display:flex;justify-content:space-between;gap:6px;align-items:baseline}.mr b{font-family:var(--serif);font-size:14px}
+.bl{display:flex;gap:6px;align-items:center}.bl .bar{flex:1;height:4px;border-radius:2px;background:rgba(42,28,19,.14);overflow:hidden}.bl .bar i{display:block;height:100%;background:var(--espresso)}.bl em{font-style:normal;font-size:10.5px;color:var(--ink2);width:20px;text-align:right}
+.proxy{font-size:10px;background:var(--latte);color:var(--crema-d);border-radius:4px;padding:0 4px;margin-left:4px;font-weight:700}
+.cell.dz{height:92px;background:var(--paper);border-left-width:5px;gap:3px;justify-content:space-between;padding:8px 12px}
+.cell.dz .nm{font-family:var(--serif);font-weight:700;font-size:13.5px;line-height:1.35;color:var(--ink)}
+.cell.dz .src{font-size:11px;color:var(--ink3);line-height:1.3}
+.cell.dz .chip{align-self:flex-start;font-size:11px;font-weight:700;padding:0 8px;border-radius:999px}
+.cell.dz.calc{border-left-color:var(--leaf)}.cell.dz.calc .chip{background:var(--leaf-bg);color:var(--leaf)}
+.cell.dz.proxy{border-left-color:var(--crema)}.cell.dz.proxy .chip{background:var(--latte);color:var(--crema-d)}
+.cell.dz.miss{border-left-color:#cdb89b;background:repeating-linear-gradient(135deg,#f6ecdb,#f6ecdb 8px,#f1e4cd 8px,#f1e4cd 16px);border-style:dashed;border-left-style:solid}.cell.dz.miss .chip{background:#efe2cd;color:var(--ink3)}
+.cell.dz.none{background:#efe7d9;border-left-color:#d8ccb8}.cell.dz.none .nm{color:var(--ink3);font-weight:500}.cell.dz.none .chip{background:#e6dccb;color:var(--ink3)}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--ink2);align-items:center}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid var(--line);vertical-align:-2px;margin-right:5px}
+/* validation */
+.vrow{display:grid;grid-template-columns:104px 1fr 150px;gap:12px;align-items:center;padding:16px 0 8px;border-bottom:1px solid var(--line)}
+.vrow:last-child{border-bottom:0}.vrow b{font-size:14px}
+.vtrack{position:relative;height:9px;background:var(--latte);border-radius:5px}
+.vtrack i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--crema)}
+.vtrack u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--espresso)}
+.vtrack s{position:absolute;top:-17px;font-size:11px;color:var(--ink3);text-decoration:none;transform:translateX(-50%)}
+.badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;text-align:center}.badge.y{background:var(--leaf-bg);color:var(--leaf)}.badge.n{background:var(--berry-bg);color:var(--berry)}
+.bars{display:flex;align-items:flex-end;gap:20px;height:150px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%}
+.bars b{font-family:var(--serif);font-size:19px}.bars .b{width:100%;max-width:84px;border-radius:9px 9px 0 0;background:var(--crema)}.bars .b.base{background:#cdb89b}.bars .b.low{background:var(--berry)}
+.bars span{font-size:12px;color:var(--ink2);text-align:center;line-height:1.3}
+.verdict{border-left:5px solid var(--berry);background:var(--berry-bg);border-radius:0 12px 12px 0;padding:10px 16px;color:#5a2417;font-size:14.5px}
+/* picks + map */
+.split{display:grid;grid-template-columns:430px 1fr;gap:18px;flex:1;min-height:0}
+.mapcard{padding:10px 12px;display:flex;flex-direction:column}
+.mapcard{justify-content:space-between}
+.mapcard svg{width:100%;height:auto;display:block}
+.mapcap{font-size:13.5px;color:var(--ink);margin-top:10px;line-height:1.5}.mapcap span{color:var(--ink3);font-size:12px}
+.mapnote{font-size:11.5px;color:var(--ink3);display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.mapnote i{display:inline-block;border-radius:50%;vertical-align:-2px;margin-right:4px}
+.picks{display:flex;flex-direction:column;gap:10px}
+.pick{position:relative;display:grid;grid-template-columns:44px 1fr;gap:10px;padding:12px 16px}
+.pick .rk{font-family:var(--serif);font-weight:900;font-size:26px;background:var(--espresso);color:var(--bg);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pick.first{border:2px solid var(--crema);background:linear-gradient(180deg,#fffaf2,#fbefdc)}
+.pick h3{font-size:19px;display:flex;gap:8px;align-items:baseline}.pick h3 small{font-family:var(--sans);font-weight:400;color:var(--ink3);font-size:12px}
+.stats{display:flex;gap:6px 14px;flex-wrap:wrap;margin:3px 0 4px;font-size:12.5px;color:var(--ink2)}.stats b{color:var(--ink)}
+.why2{font-size:12.8px;color:var(--ink2);line-height:1.45}.why2 b{color:var(--ink)}
+.funnel{font-size:12.5px;color:var(--ink2);display:flex;gap:6px;align-items:center;flex-wrap:wrap}.funnel b{font-family:var(--serif);font-size:16px;color:var(--ink)}.funnel .ar{color:var(--crema)}
+/* chart */
+.chartbox svg{width:100%;height:auto;display:block}
+.chartbox .ax{font-size:11px;fill:#8a7563}.chartbox .gl{stroke:#e2d3bd;stroke-width:1}.chartbox .st{fill:#d9c3a1}.chartbox .st.last{fill:#c58a52}
+.chartbox .ln{fill:none;stroke:#2a1c13;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}.chartbox .dt{fill:#2a1c13}.chartbox .lb{font-size:11.5px;font-weight:700;fill:#2a1c13}
+.small{font-size:12px;color:var(--ink3)}
+/* concept */
+.cpt h3{margin-bottom:6px}.cpt .hd{font-size:15.5px;font-weight:700;margin-bottom:6px;line-height:1.4}
+.cpt ul{margin:0;padding-left:18px;color:var(--ink2);font-size:13px;line-height:1.5}.cpt li{margin:2px 0}
+.ev{display:inline-block;background:var(--latte);border-radius:7px;padding:0 7px;font-size:12px;font-weight:700;color:var(--crema-d)}
+/* risk */
+.riskq{font-family:var(--serif);font-size:36px;font-weight:900;line-height:1.3}.riskq mark{background:linear-gradient(transparent 60%,#f0c8b8 60%);color:inherit}
+/* hud */
+.hud{position:fixed;right:14px;bottom:12px;z-index:10;display:flex;gap:8px;align-items:center;background:rgba(255,250,242,.92);border:1px solid var(--line);border-radius:999px;padding:5px 7px 5px 14px;font-size:13px;color:var(--ink2)}
+.hud button{border:0;background:var(--espresso);color:var(--bg);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px}
+.hud button:focus-visible,.tabs button:focus-visible,.arow:focus-visible{outline:3px solid var(--crema);outline-offset:2px}
+.prog{position:fixed;left:0;top:0;height:3px;background:var(--crema);z-index:11;transition:width .25s}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="stage" id="stage"><div class="deck" id="deck">
+
+<!-- 0 cover -->
+<section class="slide cover on" data-title="표지">
+  <svg class="cup" viewBox="0 0 320 300" aria-hidden="true">
+    <ellipse cx="160" cy="262" rx="130" ry="20" fill="#e2cfb1"/>
+    <path d="M60 110h190v70c0 44-34 78-78 78h-34c-44 0-78-34-78-78z" fill="#fffaf2" stroke="#2a1c13" stroke-width="5"/>
+    <path d="M250 128c40-6 52 20 40 44-9 18-28 26-48 22" fill="none" stroke="#2a1c13" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="155" cy="112" rx="95" ry="14" fill="#8a5a33" stroke="#2a1c13" stroke-width="5"/>
+    <path d="M120 112c10-6 22-6 30 0 10 6 24 6 36 0" fill="none" stroke="#e8c79a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M130 70c-12-14 12-22 0-36M168 76c-12-14 12-22 0-40M206 70c-12-14 12-22 0-36" fill="none" stroke="#c58a52" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+  </svg>
+  <p class="kicker">조별 과제 · 서울 신규 출점 전략</p>
+  <h1>서울의 <em>다음 핫플레이스</em>를<br>찾아라</h1>
+  <p class="lead" style="margin-top:18px;max-width:640px">업종은 <b>스페셜티 커피</b>로 한정합니다. 서울시 상권분석서비스의 2021~2025년 분기 데이터로 392개 행정동을 비교해, 뜰 상권 3곳과 1순위 매장 컨셉을 제안합니다.</p>
+  <div class="meta"><span class="tag mid">안다 · 간다 · 산다</span><span class="tag mid">행정동 392곳</span><span class="tag mid">2021–2025 분기</span></div>
+</section>
+
+<!-- 1 agenda -->
+<section class="slide alt" data-title="발표 구성">
+  <p class="kicker">발표 구성</p><h2>반드시 포함해야 할 5가지</h2>
+  <div class="body">
+    <div class="agenda">
+      <a class="arow" data-go="2" href="#"><span class="n">01</span><span class="t">“뜬다”의 정의</span><span class="d">상권이 뜨는 신호를 판단할 지표 3개 이상과, 그 지표를 고른 이유</span></a>
+      <a class="arow" data-go="4" href="#"><span class="n">02</span><span class="t">검증</span><span class="d">과거에 뜬 상권에 내 지표를 적용했을 때 미리 잡아낼 수 있었는가</span></a>
+      <a class="arow" data-go="5" href="#"><span class="n">03</span><span class="t">추천 상권 3곳</span><span class="d">각 상권의 근거 데이터와 “왜 지금인가”, 1순위를 고른 이유</span></a>
+      <a class="arow" data-go="7" href="#"><span class="n">04</span><span class="t">매장 컨셉</span><span class="d"><span class="tag">타겟 고객</span> <span class="tag">메뉴 구성</span> <span class="tag">차별성</span> <span class="tag">상권 적합성</span></span></a>
+      <a class="arow" data-go="8" href="#"><span class="n">05</span><span class="t">리스크 한 가지</span><span class="d">이 추천이 틀릴 수 있는 이유</span></a>
+    </div>
+    <div class="refs"><span>서울시 상권분석서비스 (점포-행정동, 추정매출-행정동, 영역-상권)</span><span>서울 열린데이터광장</span></div>
+  </div>
+</section>
+
+<!-- 2 definition -->
+<section class="slide" data-title="01 뜬다의 정의">
+  <p class="kicker"><span class="num">01</span> “뜬다”의 정의</p><h2>먼저 가는 사람의 흔적이 쌓이고, 주류가 오기 직전인 동네</h2>
+  <div class="body">
+    <div class="defbox"><div class="lab">우리의 정의</div><p>초기 방문자의 <b>독립 카페 개업</b>이 늘고, 초기 추종자의 <b>방문·소비</b>가 자기 과거 대비 오르기 시작했으며, <b>프랜차이즈 비중과 폐업률</b>은 아직 과열되지 않은 상태</p></div>
+    <p class="lead" style="font-size:14.5px">한 사람의 여정(안다→간다→산다)이 아니라 <b>어느 그룹까지 번졌는가</b>로 판단합니다. 동네 합산 지표에는 먼저 간 사람과 알고 간 사람이 섞여 있기 때문입니다.</p>
+    <div class="grid g4">
+      <article class="card ind"><div class="no">지표 A</div><h3>독립 커피 점포 증가율</h3><p class="why"><b>이유</b> 프랜차이즈가 아닌 카페가 늘면 입지 가능성을 먼저 본 사람이 들어온다는 뜻입니다. “스페셜티” 코드가 없어 독립 커피 점포로 근사했습니다.</p><p class="src">점포-행정동 · 분기 · 커피-음료</p></article>
+      <article class="card ind"><div class="no">지표 B</div><h3>커피 개업률</h3><p class="why"><b>이유</b> 점포 수는 폐업과 상쇄되지만, 개업률은 새로 들어오는 속도를 직접 보여줍니다.</p><p class="src">점포-행정동 · 개업 점포 ÷ 점포 수</p></article>
+      <article class="card ind"><div class="no">지표 C</div><h3>커피 결제건수 증가율</h3><p class="why"><b>이유</b> 방문의 대용 지표로, 객단가 변화의 영향이 적습니다. 생활인구를 확보하지 못해 이 지표로 대신했습니다.</p><p class="src">추정매출-행정동 · 당월 매출 건수</p></article>
+      <article class="card ind"><div class="no">지표 D</div><h3>20~30대 매출 비중 변화</h3><p class="why"><b>이유</b> 후기를 보고 찾아가는 초기 추종자는 20~30대가 많다고 가정했습니다 (검증된 대응은 아닙니다).</p><p class="src">추정매출-행정동 · 연령대별 매출</p></article>
+    </div>
+    <p class="muted">추가로 <b>프랜차이즈 비중</b>과 <b>폐업률</b>을 과열·쇠퇴를 막는 <b>게이트</b>로 씁니다 (낮을수록 안정).</p>
+  </div>
+</section>
+
+<!-- 3 grid -->
+<section class="slide alt" data-title="01 지표 격자">
+  <p class="kicker"><span class="num">01</span> 지표 격자 · 그룹 × 단계</p><h2>같은 동네를 12칸으로 읽습니다</h2>
+  <p class="lead" style="font-size:14.5px">가로는 단계(안다·간다·산다), 세로는 동네를 만나는 그룹입니다. 12칸에 어떤 지표를 넣었는지 한눈에 보고, 탭으로 후보 3곳의 값(백분위)을 겹쳐 볼 수 있습니다.</p>
+  <div class="body" style="gap:8px">
+    <div class="tabs" id="gtabs" role="group" aria-label="보기 선택"></div>
+    <div class="hm" id="hm"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</section>
+
+<!-- 4 validation -->
+<section class="slide" data-title="02 검증">
+  <p class="kicker"><span class="num">02</span> 검증</p><h2>사례로는 잡았지만, 통계로는 아직 못 믿습니다</h2>
+  <p class="lead" style="font-size:14.5px">2021→23년 신호로 392개 동의 종합점수를 만들고, 2023→25년 커피 매출 증가율 상위 20%(79곳, 컷 +14.7%)를 “전환”으로 정했습니다. 자료가 2021년부터라 홍대·성수의 초기 성장은 검증할 수 없고, <b>이후 추가 성장</b>을 맞혔는지 봅니다.</p>
+  <div class="body" style="gap:10px">
+    <div class="grid g2">
+      <div class="card" style="padding-bottom:10px">
+        <h3>알려진 핫플 동네에 적용 <span class="tag mid">5곳</span></h3>
+        <p class="muted" style="margin:2px 0 4px">종합점수 백분위(2021→23) · 세로선 = 75</p>
+        <div id="vrows"></div>
+      </div>
+      <div class="card">
+        <h3>전체 392개 동 통계</h3>
+        <p class="muted" style="margin:2px 0 8px">종합점수 상위 20% 중 전환한 비율</p>
+        <div class="bars">
+          <div><b>20%</b><i class="b base" style="height:36%"></i><span>우연히<br>맞을 확률</span></div>
+          <div><b>24%</b><i class="b" style="height:43%"></i><span>본 검증<br>19 / 79곳</span></div>
+          <div><b>15%</b><i class="b low" style="height:27%"></i><span>시점을 바꿔 재검증<br>12 / 79곳</span></div>
+        </div>
+        <hr class="s"><p style="font-size:12.8px;color:var(--ink2);line-height:1.5">본 검증은 우연과 구분되지 않습니다 (순열검정 p=0.21). 개업률(p=0.02)과 20~30대 비중 변화(p=0.009)는 본 검증에서만 의미가 있었고, 시점을 바꾸면 사라졌습니다.</p>
+      </div>
+    </div>
+    <div class="verdict"><b>판정</b> 미리 잡아낼 수 있었는가 → <b>부분적으로만, 일관되지 않게.</b> 종합점수가 높았던 성수 2곳은 전환했고 나머지 3곳은 아니었지만, 5곳이고 결과를 보고 고른 사례입니다. 그래서 추천 3곳은 “확정”이 아니라 “가설”입니다.</div>
+  </div>
+</section>
+
+<!-- 5 picks + map -->
+<section class="slide alt" data-title="03 추천 상권 3곳">
+  <p class="kicker"><span class="num">03</span> 추천 상권 3곳</p><h2>삼선동 · 용산2가동 · 가회동</h2>
+  <div class="funnel"><b>392</b>개 동 <span class="ar">→</span> 게이트 통과(프랜차이즈·폐업률 하위 70%) <span class="ar">→</span> 커피점포 50~139개 <span class="ar">→</span> 2024·25 연속 매출 증가 <span class="ar">→</span> <b>27</b>개 중 종합점수 상위 3곳</div>
+  <div class="split" style="margin-top:10px">
+    <div class="card mapcard"><div id="map"></div>
+      <p class="mapcap">세 곳 모두 홍대·연남·성수 일대 상권에서 <b>약 5km</b> 떨어져 있습니다 <span>(상권 중심점 직선거리 4.8~5.6km)</span></p>
+      <div class="mapnote"><span><i style="width:11px;height:11px;background:#2a1c13"></i>추천 3곳</span><span><i style="width:9px;height:9px;border:1.5px solid #9a6232"></i>이미 알려진 곳(홍대·연남·성수 일대)</span><span><i style="width:5px;height:5px;background:#d3bc98"></i>서울시 상권 1,650곳</span></div>
+    </div>
+    <div class="picks">
+      <article class="card pick first"><div class="rk">1</div><div><h3>삼선동 <small>성북구 · 한성대입구역·성북구청·돈암시장</small></h3>
+        <div class="stats"><span>커피점포 <b>58→76</b> (독립 62)</span><span>매출 <b>30.9→40.8억</b> (’24→’25)</span><span>20~30대 <b>47→50%</b></span><span>종합 <b>0.87</b></span></div>
+        <p class="why2"><b>왜 지금인가</b> 점포는 4년 내내 늘었는데 매출은 정체하다가 2025년에 +32%로 처음 움직였습니다. 가속이 가장 최근에 시작된 곳입니다.</p></div></article>
+      <article class="card pick"><div class="rk" style="background:#6b4f3a">2</div><div><h3>용산2가동 <small>용산구 · 해방촌·신흥시장</small></h3>
+        <div class="stats"><span>커피점포 <b>51→74</b> (독립 65)</span><span>매출 <b>25.7→47.4억</b></span><span>20~30대 <b>70→72%</b></span><span>종합 <b>0.79</b></span></div>
+        <p class="why2"><b>왜 지금인가</b> 독립 점포 증가 상위권(백분위 92), 프랜차이즈 비중 11%로 하위 5%입니다. 다만 매출 도약은 2024년이었고 2025년은 정체해 2순위입니다.</p></div></article>
+      <article class="card pick"><div class="rk" style="background:#8a7563">3</div><div><h3>가회동 <small>종로구 · 북촌(안국역)·정독도서관</small></h3>
+        <div class="stats"><span>커피점포 <b>58→84</b> (독립 75)</span><span>매출 <b>101.9→243.7억</b></span><span>20~30대 <b>48→52%</b></span><span>종합 <b>0.74</b></span></div>
+        <p class="why2"><b>왜 지금인가</b> 2025년 매출 +42%, 폐업률이 낮습니다. 다만 점포당 매출이 삼선동의 5배 이상이라 방문 성격이 다를 수 있어 3순위입니다.</p></div></article>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:8px">커피점포 140개 이상(송파1동 149개, 연희동 154개)은 “이미 규모가 큰 동네”로 제외했습니다. 이 상한은 우리가 정한 기준이며 검증되지 않았습니다.</p>
+</section>
+
+<!-- 6 first place -->
+<section class="slide" data-title="03 1순위 근거">
+  <p class="kicker"><span class="num">03</span> 1순위를 고른 이유</p><h2>삼선동은 “이제 막 움직이기 시작한” 곳입니다</h2>
+  <div class="body" style="gap:10px">
+    <div class="tabs" id="ctabs" role="group" aria-label="동네 선택"></div>
+    <div class="grid" style="grid-template-columns:1.35fr 1fr;align-items:stretch">
+      <div class="card chartbox"><h3 id="ctitle" style="font-size:16px;margin-bottom:4px"></h3><div id="chart"></div><p class="small">막대 = 커피 점포 수(연평균, 왼쪽 축), 선 = 커피 연 매출(억 원·명목, 오른쪽 축)</p></div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <h3>1순위 선정 이유 3가지</h3>
+        <ol style="margin:10px 0 0;padding-left:20px;color:var(--ink2);font-size:14px;line-height:1.55">
+          <li style="margin-bottom:8px"><b>가속의 시점이 가장 최근</b> — 2025년 매출 +32%. 용산2가동은 2024년에 이미 도약했습니다.</li>
+          <li style="margin-bottom:8px"><b>초기 신호가 고르게 높음</b> — 독립 점포 증가, 개업률, 결제건수, 20~30대 비중이 모두 백분위 83~95입니다.</li>
+          <li style="margin-bottom:8px"><b>과열 신호는 낮음</b> — 프랜차이즈 비중은 하위 14% 수준으로 독립 카페 중심입니다.</li>
+          <li><b>아직 덜 알려진 단계</b> — 유튜브 관련 영상이 2024년 5개에서 2025년 15개로 늘었지만 조회수 중앙값은 476으로 성수(3,967)의 8분의 1 수준입니다. 구글 트렌드 검색량은 너무 적어 측정되지 않았습니다.</li>
+        </ol>
+        <hr class="s"><p class="muted">반대로 삼선동은 개업률 28%, 폐업률 24%로 회전이 빠릅니다. 이 점이 컨셉(소형·저고정비)으로 이어집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 concept -->
+<section class="slide alt" data-title="04 매장 컨셉">
+  <p class="kicker"><span class="num">04</span> 매장 컨셉 · 삼선동 1순위</p><h2>평일 낮을 위한 작은 스페셜티 로스터리 바</h2>
+  <p class="lead" style="font-size:14.5px">삼선동 2025년 데이터를 근거로 한 <b>우리 팀의 제안</b>입니다. 근거 수치는 배지로, 해석과 제안은 “(제안)”으로 표시했습니다.</p>
+  <div class="body" style="gap:10px">
+    <div class="grid g2">
+      <article class="card cpt"><h3><span class="tag">타겟 고객</span></h3><p class="hd">평일 낮에 한성대입구역·성북구청 일대를 오가는 20~30대와 40~50대</p>
+        <ul><li>20~30대 매출 비중 <span class="ev">50.1%</span> (20대 29%, 30대 21%), 40~50대 <span class="ev">33%</span></li><li>여성 <span class="ev">60%</span>, 주말 비중 <span class="ev">28%</span> (평일 72%)</li></ul></article>
+      <article class="card cpt"><h3><span class="tag">메뉴 구성</span></h3><p class="hd">싱글오리진 핸드드립 + 에스프레소 시그니처 2~3종 + 원두 소분 판매</p>
+        <ul><li>11~17시 매출 <span class="ev">62%</span> → 낮 시간 중심의 드립·라테</li><li>17~21시 <span class="ev">26%</span> → 디저트 페어링은 소량 (제안)</li></ul></article>
+      <article class="card cpt"><h3><span class="tag">차별성</span></h3><p class="hd">독립 카페끼리의 경쟁에서 “원두의 일관성과 설명”으로 구분</p>
+        <ul><li>커피 점포 76개 중 독립 <span class="ev">62개</span> → 프랜차이즈보다 독립 카페 간 차별이 과제</li><li>로스팅 정보 카드, 월별 원두 교체, 테이스팅 클래스 (제안)</li></ul></article>
+      <article class="card cpt"><h3><span class="tag">상권 적합성</span></h3><p class="hd">회전이 빠른 상권이라 고정비를 낮춘 소형 매장으로 진입</p>
+        <ul><li>개업률 <span class="ev">28%</span>, 폐업률 <span class="ev">24%</span> → 정착 실패 위험이 상대적으로 큼</li><li>주말 의존이 낮아 평일 중심 운영·좌석 최소화 (제안)</li></ul></article>
+    </div>
+    <p class="muted">2·3순위 변형: 용산2가동은 저녁·야간(17시 이후 47%)과 주말(47%) 중심의 에스프레소 바, 가회동은 매출 규모가 커 방문 목적형 매장이 어울립니다.</p>
+  </div>
+</section>
+
+<!-- 8 risk -->
+<section class="slide" data-title="05 리스크">
+  <p class="kicker"><span class="num">05</span> 리스크 한 가지</p>
+  <div class="body" style="gap:18px">
+    <p class="riskq">이 추천이 틀릴 수 있는 가장 큰 이유는<br><mark>우리 지표의 예측력이 입증되지 않았다는 점</mark>입니다.</p>
+    <div class="grid g3">
+      <div class="card"><div class="big">p = 0.21</div><p style="margin-top:8px;color:var(--ink2);font-size:14px">종합점수 상위 20%의 적중이 우연과 구분되지 않습니다.</p></div>
+      <div class="card"><div class="big">12 / 79</div><p style="margin-top:8px;color:var(--ink2);font-size:14px">시점을 바꿔 재검증하면 우연(20%)보다 낮은 15%였습니다.</p></div>
+      <div class="card"><div class="big">3곳 / 392곳</div><p style="margin-top:8px;color:var(--ink2);font-size:14px">추천은 가설입니다. 선별 기준(커피점포 상한)도 우리가 정한 것입니다.</p></div>
+    </div>
+    <div><h3 style="font-size:16px;margin-bottom:6px">이 리스크를 줄이는 방법 (다음 단계)</h3>
+      <ul style="margin:0;padding-left:20px;color:var(--ink2);font-size:14px;line-height:1.6"><li>“안다” 지표(검색량·SNS)와 생활인구를 더해 신호를 보강하고, 같은 방식으로 다시 검증</li><li>분기 데이터가 갱신될 때마다 후보의 신호가 이어지는지 모니터링</li><li>출점 전 현장 조사로 점포 회전·임대 조건 확인</li></ul></div>
+  </div>
+</section>
+
+<!-- 9 appendix -->
+<section class="slide alt" data-title="부록 데이터·한계">
+  <p class="kicker">부록</p><h2>데이터와 한계</h2>
+  <div class="body"><div class="grid g2">
+    <div class="card"><h3 style="font-size:17px">사용한 데이터</h3>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink2);font-size:13.5px;line-height:1.6">
+        <li>서울시 상권분석서비스(점포-행정동), 2021~2025년 분기, 행정동 425개</li>
+        <li>서울시 상권분석서비스(추정매출-행정동), 연령대·요일·시간대별</li>
+        <li>서울시 상권분석서비스(영역-상권): 동네 이름과 지도 좌표</li>
+        <li>구글 트렌드(검색량 대용)와 유튜브 검색 상위 샘플(영상 수·조회수), 6개 동네만 수집</li>
+        <li>출처: 서울 열린데이터광장 (공공누리 1유형)</li></ul></div>
+    <div class="card"><h3 style="font-size:17px">한계</h3>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink2);font-size:13.5px;line-height:1.6">
+        <li>스페셜티 업종 코드가 없어 <b>독립 커피-음료 점포</b>로 근사했습니다. 일반 동네 카페가 포함됩니다.</li>
+        <li>2021년 이후 자료만 있어 홍대·성수의 초기 성장은 검증할 수 없고, 2021~23년에는 코로나 회복 효과가 섞여 있습니다.</li>
+        <li>매출은 명목 금액입니다. 임대료, 승하차, 생활인구, 네이버 검색량, 인스타 해시태그는 반영하지 못했습니다. 구글 트렌드·유튜브는 392개 동이 아니라 6개 동네만 수집했고 검증에는 쓰지 않았습니다.</li>
+        <li>행정동 단위라 골목 단위 차이는 보이지 않습니다. 전환 기준(상위 20%)과 상한은 팀이 정한 가정입니다.</li></ul></div>
+  </div></div>
+</section>
+
+</div></div>
+
+<div class="hud" role="group" aria-label="슬라이드 이동"><span id="pg">1 / 10</span><button id="prev" aria-label="이전">←</button><button id="next" aria-label="다음">→</button></div>
+
+<script>
+const PTS = [[3285, 7557, 0], [3330, 7538, 0], [3364, 7543, 0], [3290, 7550, 0], [3289, 7557, 0], [3358, 7540, 0], [3355, 7538, 0], [3354, 7541, 0], [3353, 7538, 0], [3351, 7538, 0], [3350, 7544, 0], [3350, 7539, 0], [3349, 7538, 0], [3345, 7539, 0], [3342, 7546, 0], [3341, 7538, 0], [3338, 7538, 0], [3333, 7538, 0], [3327, 7537, 0], [3316, 7543, 0], [3355, 7543, 0], [3335, 7561, 0], [3330, 7540, 0], [3350, 7540, 0], [3344, 7542, 0], [3337, 7541, 0], [3336, 7547, 0], [3320, 7541, 0], [3330, 7547, 0], [3312, 7545, 0], [3312, 7555, 3], [3309, 7539, 0], [3305, 7563, 0], [3306, 7545, 0], [3296, 7542, 0], [3292, 7555, 0], [3283, 7532, 0], [3268, 7589, 0], [3363, 7544, 0], [3358, 7539, 0], [3358, 7552, 0], [3355, 7539, 0], [3355, 7555, 0], [3351, 7544, 0], [3349, 7549, 0], [3343, 7550, 0], [3342, 7560, 0], [3341, 7543, 0], [3340, 7547, 0], [3335, 7570, 0], [3336, 7554, 0], [3332, 7569, 0], [3329, 7563, 0], [3283, 7584, 0], [3284, 7611, 0], [3310, 7563, 3], [3315, 7562, 3], [3320, 7549, 0], [3327, 7572, 0], [3271, 7611, 0], [3270, 7549, 0], [3273, 7600, 0], [3275, 7544, 0], [3362, 7548, 0], [3287, 7569, 0], [3288, 7544, 0], [3289, 7553, 0], [3291, 7566, 0], [3293, 7560, 0], [3297, 7617, 0], [3278, 7595, 0], [3278, 7579, 0], [3282, 7545, 0], [3366, 7553, 0], [3288, 7532, 0], [3350, 7533, 0], [3307, 7527, 0], [3353, 7537, 0], [3352, 7536, 0], [3300, 7519, 0], [3298, 7518, 0], [3334, 7534, 0], [3353, 7534, 0], [3349, 7506, 0], [3345, 7536, 0], [3334, 7530, 0], [3328, 7519, 0], [3327, 7533, 0], [3326, 7525, 0], [3321, 7534, 0], [3303, 7519, 0], [3361, 7532, 0], [3359, 7524, 0], [3356, 7537, 0], [3355, 7525, 0], [3365, 7533, 0], [3364, 7536, 0], [3362, 7527, 0], [3350, 7536, 0], [3336, 7526, 0], [3331, 7526, 0], [3356, 7529, 0], [3348, 7509, 0], [3344, 7529, 0], [3341, 7519, 0], [3313, 7529, 0], [3328, 7532, 0], [3326, 7522, 0], [3321, 7531, 0], [3319, 7525, 0], [3309, 7525, 0], [3309, 7519, 0], [3309, 7533, 0], [3305, 7529, 0], [3302, 7514, 0], [3301, 7534, 0], [3300, 7525, 0], [3295, 7523, 0], [3296, 7527, 0], [3289, 7524, 0], [3286, 7518, 0], [3293, 7513, 0], [3278, 7516, 0], [3352, 7519, 0], [3350, 7526, 0], [3348, 7505, 0], [3364, 7525, 0], [3361, 7538, 0], [3353, 7513, 0], [3352, 7523, 0], [3348, 7515, 0], [3346, 7521, 0], [3344, 7510, 0], [3342, 7504, 0], [3341, 7524, 0], [3338, 7522, 0], [3335, 7520, 0], [3326, 7513, 0], [3311, 7513, 0], [3307, 7512, 0], [3305, 7516, 0], [3367, 7531, 0], [3266, 7469, 0], [3325, 7472, 0], [3333, 7460, 0], [3318, 7471, 0], [3311, 7492, 2], [3298, 7501, 0], [3296, 7447, 0], [3280, 7503, 0], [3275, 7476, 0], [3279, 7462, 0], [3277, 7470, 0], [3292, 7487, 0], [3344, 7469, 0], [3326, 7473, 0], [3294, 7488, 0], [3294, 7471, 0], [3351, 7472, 0], [3349, 7475, 0], [3342, 7478, 0], [3338, 7489, 0], [3337, 7478, 0], [3335, 7455, 0], [3334, 7468, 0], [3333, 7462, 0], [3331, 7477, 0], [3329, 7460, 0], [3328, 7449, 0], [3328, 7455, 0], [3325, 7468, 0], [3268, 7456, 0], [3303, 7501, 0], [3309, 7496, 0], [3311, 7490, 2], [3272, 7479, 0], [3273, 7486, 0], [3277, 7455, 0], [3278, 7478, 0], [3280, 7487, 0], [3320, 7468, 0], [3321, 7446, 0], [3321, 7486, 0], [3321, 7480, 0], [3323, 7476, 0], [3281, 7476, 0], [3285, 7507, 0], [3285, 7499, 0], [3285, 7484, 0], [3286, 7492, 0], [3286, 7452, 0], [3286, 7447, 0], [3287, 7481, 0], [3293, 7466, 0], [3295, 7503, 0], [3295, 7495, 0], [3296, 7473, 0], [3299, 7498, 0], [3301, 7442, 0], [3374, 7527, 0], [3414, 7479, 4], [3412, 7527, 0], [3411, 7494, 4], [3393, 7519, 0], [3391, 7539, 0], [3406, 7498, 4], [3384, 7527, 0], [3382, 7522, 0], [3378, 7523, 0], [3366, 7498, 0], [3363, 7508, 0], [3417, 7491, 4], [3405, 7495, 4], [3402, 7486, 4], [3388, 7521, 0], [3362, 7498, 0], [3432, 7502, 0], [3425, 7494, 4], [3377, 7506, 0], [3348, 7484, 0], [3352, 7484, 0], [3357, 7488, 0], [3358, 7493, 0], [3363, 7504, 0], [3370, 7509, 0], [3372, 7501, 0], [3407, 7501, 4], [3411, 7530, 0], [3412, 7487, 4], [3413, 7500, 4], [3422, 7483, 4], [3368, 7499, 0], [3369, 7513, 0], [3370, 7496, 0], [3380, 7518, 0], [3380, 7499, 0], [3380, 7533, 0], [3417, 7524, 0], [3418, 7475, 4], [3421, 7500, 0], [3380, 7529, 0], [3385, 7539, 0], [3385, 7532, 0], [3386, 7515, 0], [3388, 7532, 0], [3394, 7496, 4], [3395, 7513, 0], [3398, 7534, 0], [3400, 7532, 0], [3400, 7501, 4], [3402, 7521, 0], [3402, 7493, 4], [3406, 7485, 4], [3407, 7479, 4], [3452, 7464, 0], [3432, 7473, 0], [3429, 7476, 0], [3427, 7479, 0], [3464, 7516, 0], [3453, 7526, 0], [3453, 7540, 0], [3451, 7472, 0], [3446, 7467, 0], [3436, 7488, 0], [3435, 7488, 0], [3433, 7480, 0], [3474, 7484, 0], [3473, 7473, 0], [3470, 7480, 0], [3463, 7491, 0], [3461, 7509, 0], [3458, 7478, 0], [3450, 7514, 0], [3440, 7497, 0], [3436, 7483, 0], [3453, 7536, 0], [3452, 7473, 0], [3456, 7489, 0], [3427, 7473, 0], [3430, 7480, 0], [3431, 7488, 0], [3434, 7494, 0], [3439, 7494, 0], [3441, 7499, 0], [3441, 7467, 0], [3442, 7512, 0], [3445, 7492, 0], [3446, 7506, 0], [3446, 7522, 0], [3447, 7466, 0], [3448, 7528, 0], [3450, 7520, 0], [3452, 7508, 0], [3467, 7511, 0], [3468, 7485, 0], [3486, 7497, 0], [3485, 7494, 0], [3450, 7470, 0], [3450, 7479, 0], [3457, 7534, 0], [3455, 7516, 0], [3434, 7471, 0], [3469, 7515, 0], [3473, 7505, 0], [3458, 7465, 0], [3459, 7507, 0], [3460, 7523, 0], [3459, 7484, 0], [3460, 7516, 0], [3463, 7525, 0], [3463, 7469, 0], [3464, 7486, 0], [3465, 7519, 0], [3465, 7496, 0], [3467, 7474, 0], [3494, 7499, 0], [3374, 7542, 0], [3434, 7552, 0], [3431, 7584, 0], [3417, 7552, 0], [3415, 7577, 0], [3425, 7602, 0], [3419, 7532, 0], [3419, 7545, 0], [3413, 7534, 0], [3411, 7533, 0], [3397, 7560, 0], [3396, 7556, 0], [3394, 7556, 0], [3393, 7558, 0], [3393, 7560, 0], [3393, 7556, 0], [3393, 7553, 0], [3391, 7555, 0], [3391, 7559, 0], [3389, 7560, 0], [3377, 7554, 0], [3439, 7542, 0], [3428, 7523, 0], [3418, 7574, 0], [3411, 7580, 0], [3404, 7558, 0], [3369, 7547, 0], [3432, 7549, 0], [3431, 7536, 0], [3424, 7576, 0], [3374, 7557, 0], [3375, 7553, 0], [3410, 7555, 0], [3410, 7564, 0], [3411, 7571, 0], [3410, 7538, 0], [3377, 7550, 0], [3377, 7546, 0], [3378, 7560, 0], [3381, 7549, 0], [3381, 7542, 0], [3382, 7556, 0], [3384, 7566, 0], [3393, 7549, 0], [3394, 7571, 0], [3394, 7576, 0], [3396, 7561, 0], [3396, 7565, 0], [3399, 7566, 0], [3401, 7549, 0], [3403, 7551, 0], [3405, 7566, 0], [3386, 7571, 0], [3388, 7551, 0], [3389, 7575, 0], [3392, 7565, 0], [3408, 7544, 0], [3409, 7577, 0], [3436, 7549, 0], [3436, 7528, 0], [3439, 7536, 0], [3441, 7558, 0], [3442, 7551, 0], [3426, 7527, 0], [3427, 7583, 0], [3427, 7537, 0], [3413, 7567, 0], [3414, 7556, 0], [3416, 7538, 0], [3417, 7581, 0], [3416, 7589, 0], [3419, 7577, 0], [3419, 7554, 0], [3420, 7529, 0], [3419, 7539, 0], [3422, 7571, 0], [3423, 7585, 0], [3456, 7550, 0], [3448, 7592, 0], [3447, 7580, 0], [3446, 7579, 0], [3445, 7602, 0], [3477, 7608, 0], [3477, 7590, 0], [3476, 7578, 0], [3472, 7605, 0], [3467, 7559, 0], [3467, 7575, 0], [3459, 7554, 0], [3452, 7624, 0], [3462, 7587, 0], [3463, 7558, 0], [3497, 7617, 0], [3484, 7627, 0], [3480, 7590, 0], [3479, 7574, 0], [3479, 7622, 0], [3477, 7578, 0], [3473, 7572, 0], [3472, 7578, 0], [3465, 7595, 0], [3468, 7562, 0], [3470, 7592, 0], [3468, 7570, 0], [3466, 7578, 0], [3464, 7583, 0], [3463, 7553, 0], [3460, 7574, 0], [3460, 7561, 0], [3460, 7568, 0], [3460, 7591, 0], [3455, 7575, 0], [3479, 7595, 0], [3478, 7605, 0], [3486, 7596, 0], [3484, 7591, 0], [3455, 7544, 0], [3454, 7566, 0], [3454, 7593, 0], [3448, 7565, 0], [3447, 7609, 0], [3446, 7590, 0], [3454, 7626, 0], [3451, 7601, 0], [3452, 7622, 0], [3450, 7612, 0], [3450, 7581, 0], [3449, 7588, 0], [3449, 7600, 0], [3448, 7571, 0], [3446, 7586, 0], [3444, 7600, 0], [3443, 7578, 0], [3444, 7610, 0], [3443, 7591, 0], [3442, 7582, 0], [3442, 7586, 0], [3455, 7582, 0], [3423, 7601, 0], [3425, 7611, 0], [3422, 7610, 0], [3411, 7609, 0], [3409, 7615, 0], [3404, 7633, 0], [3386, 7610, 0], [3366, 7598, 0], [3357, 7578, 1], [3402, 7627, 0], [3351, 7599, 0], [3348, 7616, 0], [3346, 7609, 0], [3395, 7599, 0], [3377, 7567, 0], [3376, 7608, 0], [3359, 7579, 0], [3357, 7574, 1], [3345, 7573, 1], [3429, 7612, 0], [3427, 7617, 0], [3425, 7608, 0], [3421, 7611, 0], [3420, 7616, 0], [3418, 7609, 0], [3413, 7613, 0], [3412, 7624, 0], [3408, 7605, 0], [3407, 7610, 0], [3404, 7616, 0], [3401, 7625, 0], [3403, 7604, 0], [3388, 7584, 0], [3393, 7607, 0], [3395, 7622, 0], [3399, 7604, 0], [3319, 7581, 0], [3325, 7589, 0], [3332, 7608, 0], [3332, 7580, 0], [3332, 7628, 0], [3335, 7583, 0], [3338, 7575, 0], [3339, 7611, 0], [3341, 7577, 0], [3344, 7610, 0], [3347, 7618, 0], [3356, 7602, 0], [3360, 7597, 0], [3362, 7574, 0], [3360, 7586, 0], [3362, 7563, 0], [3364, 7583, 0], [3364, 7569, 0], [3366, 7565, 0], [3367, 7609, 0], [3367, 7601, 0], [3369, 7607, 0], [3370, 7558, 0], [3348, 7567, 1], [3350, 7601, 0], [3349, 7577, 0], [3351, 7614, 0], [3352, 7606, 0], [3355, 7582, 0], [3354, 7572, 1], [3372, 7601, 0], [3375, 7591, 0], [3376, 7572, 0], [3377, 7564, 0], [3381, 7596, 0], [3383, 7588, 0], [3384, 7608, 0], [3384, 7581, 0], [3385, 7600, 0], [3386, 7592, 0], [3357, 7679, 0], [3357, 7661, 0], [3354, 7677, 0], [3382, 7617, 0], [3378, 7660, 0], [3377, 7660, 0], [3376, 7618, 0], [3372, 7671, 0], [3368, 7652, 0], [3367, 7651, 0], [3365, 7652, 0], [3365, 7669, 0], [3362, 7629, 0], [3363, 7679, 0], [3361, 7640, 0], [3362, 7631, 0], [3379, 7617, 0], [3371, 7641, 0], [3370, 7663, 0], [3399, 7645, 0], [3386, 7644, 0], [3386, 7659, 0], [3384, 7620, 0], [3382, 7614, 0], [3380, 7666, 0], [3380, 7657, 0], [3379, 7630, 0], [3376, 7662, 0], [3358, 7630, 0], [3353, 7641, 0], [3355, 7671, 0], [3355, 7655, 0], [3344, 7676, 0], [3348, 7670, 0], [3348, 7681, 0], [3347, 7675, 0], [3347, 7708, 0], [3351, 7662, 0], [3351, 7676, 0], [3352, 7654, 0], [3369, 7674, 0], [3352, 7699, 0], [3352, 7685, 0], [3356, 7666, 0], [3356, 7660, 0], [3357, 7649, 0], [3374, 7624, 0], [3375, 7673, 0], [3360, 7633, 0], [3360, 7683, 0], [3360, 7674, 0], [3363, 7654, 0], [3366, 7632, 0], [3366, 7679, 0], [3367, 7627, 0], [3367, 7644, 0], [3368, 7637, 0], [3362, 7660, 0], [3363, 7665, 0], [3368, 7669, 0], [3369, 7621, 0], [3371, 7655, 0], [3373, 7628, 0], [3387, 7683, 0], [3391, 7665, 0], [3406, 7691, 0], [3401, 7728, 0], [3395, 7723, 0], [3388, 7667, 0], [3385, 7714, 0], [3385, 7680, 0], [3381, 7683, 0], [3381, 7679, 0], [3356, 7696, 0], [3403, 7690, 0], [3394, 7702, 0], [3394, 7733, 0], [3395, 7760, 0], [3403, 7748, 0], [3394, 7721, 0], [3393, 7660, 0], [3392, 7713, 0], [3391, 7708, 0], [3391, 7695, 0], [3391, 7703, 0], [3404, 7707, 0], [3401, 7734, 0], [3399, 7721, 0], [3397, 7695, 0], [3387, 7711, 0], [3385, 7717, 0], [3377, 7675, 0], [3378, 7681, 0], [3369, 7687, 0], [3368, 7706, 0], [3360, 7694, 0], [3389, 7750, 0], [3388, 7695, 0], [3391, 7670, 0], [3380, 7710, 0], [3382, 7722, 0], [3381, 7703, 0], [3382, 7708, 0], [3354, 7697, 0], [3354, 7688, 0], [3357, 7703, 0], [3443, 7700, 0], [3445, 7635, 0], [3441, 7706, 0], [3437, 7704, 0], [3430, 7673, 0], [3428, 7673, 0], [3421, 7680, 0], [3431, 7667, 0], [3425, 7682, 0], [3425, 7696, 0], [3447, 7629, 0], [3446, 7686, 0], [3442, 7641, 0], [3418, 7715, 0], [3419, 7626, 0], [3419, 7654, 0], [3417, 7728, 0], [3445, 7648, 0], [3445, 7632, 0], [3445, 7639, 0], [3441, 7660, 0], [3441, 7632, 0], [3421, 7632, 0], [3417, 7735, 0], [3438, 7712, 0], [3438, 7657, 0], [3436, 7698, 0], [3433, 7707, 0], [3466, 7638, 0], [3455, 7687, 0], [3457, 7727, 0], [3449, 7725, 0], [3433, 7702, 0], [3411, 7734, 0], [3410, 7638, 0], [3429, 7625, 0], [3449, 7641, 0], [3447, 7718, 0], [3445, 7702, 0], [3426, 7703, 0], [3426, 7623, 0], [3443, 7706, 0], [3223, 7626, 0], [3218, 7630, 0], [3214, 7630, 0], [3214, 7583, 0], [3212, 7569, 0], [3232, 7613, 0], [3229, 7612, 0], [3225, 7611, 0], [3210, 7618, 0], [3209, 7573, 0], [3203, 7572, 0], [3194, 7560, 0], [3179, 7562, 0], [3230, 7609, 0], [3219, 7594, 0], [3219, 7629, 0], [3213, 7662, 0], [3211, 7616, 0], [3210, 7591, 0], [3214, 7639, 0], [3213, 7609, 0], [3212, 7633, 0], [3214, 7568, 0], [3213, 7599, 0], [3226, 7641, 0], [3223, 7634, 0], [3205, 7625, 0], [3205, 7586, 0], [3223, 7593, 0], [3222, 7598, 0], [3197, 7577, 0], [3196, 7595, 0], [3191, 7554, 0], [3205, 7575, 0], [3180, 7564, 0], [3211, 7625, 0], [3210, 7579, 0], [3210, 7641, 0], [3220, 7609, 0], [3219, 7589, 0], [3233, 7603, 0], [3232, 7607, 0], [3230, 7595, 0], [3203, 7569, 0], [3218, 7641, 0], [3200, 7604, 0], [3208, 7576, 0], [3208, 7620, 0], [3206, 7593, 0], [3207, 7633, 0], [3230, 7616, 0], [3227, 7598, 0], [3229, 7634, 0], [3196, 7563, 0], [3217, 7617, 0], [3217, 7623, 0], [3197, 7587, 0], [3197, 7618, 0], [3243, 7668, 0], [3239, 7638, 0], [3215, 7577, 0], [3214, 7588, 0], [3226, 7605, 0], [3226, 7631, 0], [3205, 7615, 0], [3205, 7608, 0], [3205, 7600, 0], [3225, 7616, 0], [3223, 7545, 0], [3273, 7516, 0], [3276, 7539, 0], [3258, 7591, 0], [3252, 7516, 0], [3252, 7518, 0], [3250, 7577, 0], [3249, 7578, 0], [3241, 7513, 0], [3230, 7533, 0], [3220, 7551, 0], [3208, 7538, 0], [3279, 7520, 0], [3252, 7572, 0], [3249, 7516, 0], [3240, 7513, 0], [3230, 7532, 0], [3234, 7519, 0], [3265, 7515, 0], [3275, 7518, 0], [3271, 7519, 0], [3222, 7568, 0], [3221, 7561, 0], [3220, 7549, 0], [3217, 7533, 0], [3257, 7580, 0], [3238, 7566, 0], [3236, 7580, 0], [3235, 7540, 0], [3236, 7552, 0], [3234, 7530, 0], [3256, 7585, 0], [3255, 7573, 0], [3215, 7545, 0], [3214, 7560, 0], [3206, 7568, 0], [3255, 7536, 0], [3232, 7550, 0], [3228, 7519, 0], [3206, 7539, 0], [3254, 7584, 0], [3285, 7526, 0], [3281, 7521, 0], [3280, 7525, 0], [3280, 7531, 0], [3204, 7555, 0], [3251, 7527, 0], [3251, 7563, 0], [3251, 7568, 0], [3249, 7572, 0], [3200, 7559, 0], [3195, 7555, 0], [3246, 7515, 0], [3241, 7566, 0], [3275, 7537, 0], [3275, 7527, 0], [3227, 7537, 0], [3224, 7554, 0], [3194, 7549, 0], [3240, 7551, 0], [3240, 7545, 0], [3224, 7530, 0], [3228, 7512, 4], [3238, 7492, 0], [3226, 7524, 4], [3223, 7512, 4], [3266, 7513, 0], [3265, 7492, 0], [3264, 7491, 0], [3259, 7483, 0], [3248, 7484, 0], [3218, 7506, 4], [3218, 7507, 4], [3205, 7498, 0], [3205, 7507, 4], [3196, 7513, 0], [3194, 7516, 0], [3182, 7526, 0], [3180, 7551, 0], [3183, 7536, 0], [3171, 7556, 0], [3263, 7488, 0], [3254, 7482, 0], [3219, 7520, 4], [3214, 7502, 4], [3212, 7510, 4], [3220, 7498, 4], [3206, 7500, 4], [3201, 7511, 0], [3222, 7493, 4], [3220, 7526, 4], [3252, 7475, 0], [3278, 7501, 0], [3201, 7527, 0], [3200, 7519, 0], [3252, 7498, 0], [3251, 7489, 0], [3227, 7506, 4], [3224, 7519, 4], [3211, 7495, 0], [3209, 7528, 0], [3209, 7516, 4], [3251, 7494, 0], [3247, 7510, 0], [3200, 7503, 0], [3199, 7531, 0], [3245, 7500, 0], [3242, 7507, 0], [3188, 7515, 0], [3186, 7509, 0], [3206, 7491, 0], [3241, 7502, 0], [3240, 7493, 0], [3275, 7508, 0], [3275, 7497, 0], [3195, 7524, 0], [3238, 7490, 0], [3233, 7510, 4], [3194, 7519, 0], [3194, 7501, 0], [3217, 7494, 4], [3213, 7520, 4], [3272, 7498, 0], [3269, 7500, 0], [3266, 7502, 0], [3232, 7499, 4], [3228, 7496, 4], [3264, 7499, 0], [3255, 7511, 0], [3255, 7489, 0], [3252, 7507, 0], [3204, 7507, 4], [3205, 7513, 4], [3202, 7534, 0], [3264, 7514, 0], [3192, 7529, 0], [3194, 7510, 0], [3190, 7544, 0], [3189, 7522, 0], [3078, 7471, 0], [3151, 7446, 0], [3147, 7494, 0], [3137, 7479, 0], [3134, 7498, 0], [3119, 7447, 0], [3117, 7443, 0], [3101, 7442, 0], [3101, 7454, 0], [3093, 7465, 0], [3091, 7470, 0], [3089, 7470, 0], [3088, 7451, 0], [3077, 7471, 0], [3150, 7466, 0], [3148, 7453, 0], [3134, 7503, 0], [3129, 7456, 0], [3127, 7449, 0], [3116, 7449, 0], [3141, 7492, 0], [3138, 7455, 0], [3138, 7481, 0], [3106, 7446, 0], [3099, 7445, 0], [3099, 7438, 0], [3097, 7452, 0], [3136, 7467, 0], [3135, 7474, 0], [3135, 7494, 0], [3122, 7458, 0], [3098, 7432, 0], [3094, 7444, 0], [3093, 7460, 0], [3090, 7451, 0], [3156, 7492, 0], [3147, 7446, 0], [3089, 7466, 0], [3088, 7445, 0], [3086, 7473, 0], [3085, 7463, 0], [3130, 7451, 0], [3129, 7447, 0], [3128, 7461, 0], [3122, 7444, 0], [3121, 7452, 0], [3147, 7491, 0], [3144, 7443, 0], [3143, 7485, 0], [3141, 7421, 0], [3113, 7439, 0], [3111, 7449, 0], [3106, 7455, 0], [3076, 7475, 0], [3083, 7479, 0], [3079, 7485, 0], [3112, 7509, 0], [3091, 7500, 0], [3057, 7541, 0], [3052, 7525, 0], [3128, 7470, 0], [3126, 7514, 0], [3108, 7469, 0], [3104, 7517, 0], [3103, 7489, 0], [3096, 7473, 0], [3092, 7491, 0], [3091, 7519, 0], [3078, 7520, 0], [3070, 7507, 0], [3114, 7506, 0], [3109, 7464, 0], [3096, 7485, 0], [3053, 7522, 0], [3042, 7533, 0], [3132, 7468, 0], [3060, 7536, 0], [3059, 7523, 0], [3058, 7546, 0], [3059, 7527, 0], [3066, 7553, 0], [3066, 7542, 0], [3062, 7553, 0], [3060, 7531, 0], [3152, 7498, 0], [3151, 7501, 0], [3136, 7508, 0], [3128, 7501, 0], [3128, 7476, 0], [3111, 7473, 0], [3109, 7505, 0], [3059, 7515, 0], [3054, 7543, 0], [3055, 7547, 0], [3108, 7516, 0], [3097, 7540, 0], [3096, 7476, 0], [3096, 7511, 0], [3094, 7507, 0], [3127, 7521, 0], [3127, 7465, 0], [3127, 7495, 0], [3126, 7512, 0], [3107, 7484, 0], [3106, 7492, 0], [3103, 7532, 0], [3102, 7462, 0], [3054, 7536, 0], [3051, 7530, 0], [3052, 7519, 0], [3095, 7532, 0], [3094, 7480, 0], [3091, 7490, 0], [3121, 7474, 0], [3118, 7506, 0], [3117, 7469, 0], [3102, 7514, 0], [3099, 7470, 0], [3100, 7491, 0], [3088, 7505, 0], [3074, 7496, 0], [3066, 7511, 0], [3117, 7523, 0], [3116, 7500, 0], [3116, 7463, 0], [3115, 7504, 0], [3107, 7408, 0], [3102, 7402, 0], [3170, 7375, 0], [3166, 7390, 0], [3165, 7388, 0], [3133, 7415, 0], [3131, 7415, 0], [3119, 7393, 0], [3114, 7412, 0], [3112, 7413, 0], [3187, 7377, 0], [3179, 7379, 0], [3172, 7424, 0], [3154, 7413, 0], [3121, 7388, 0], [3173, 7402, 0], [3169, 7374, 0], [3105, 7400, 0], [3117, 7387, 0], [3118, 7380, 0], [3176, 7371, 0], [3176, 7395, 0], [3175, 7388, 0], [3104, 7413, 0], [3102, 7394, 0], [3102, 7404, 0], [3066, 7396, 0], [3172, 7415, 0], [3170, 7379, 0], [3169, 7397, 0], [3169, 7403, 0], [3096, 7400, 0], [3095, 7387, 0], [3170, 7392, 0], [3125, 7387, 0], [3127, 7419, 0], [3167, 7411, 0], [3166, 7385, 0], [3162, 7402, 0], [3162, 7384, 0], [3159, 7397, 0], [3158, 7405, 0], [3156, 7427, 0], [3089, 7399, 0], [3086, 7390, 0], [3083, 7406, 0], [3123, 7412, 0], [3120, 7420, 0], [3182, 7372, 0], [3135, 7411, 0], [3134, 7408, 0], [3133, 7407, 0], [3125, 7400, 0], [3079, 7406, 0], [3075, 7401, 0], [3075, 7394, 0], [3115, 7397, 0], [3115, 7410, 0], [3108, 7417, 0], [3107, 7402, 0], [3193, 7301, 0], [3187, 7360, 0], [3200, 7319, 0], [3193, 7298, 0], [3190, 7329, 0], [3189, 7323, 0], [3188, 7367, 0], [3186, 7352, 0], [3181, 7347, 0], [3177, 7354, 0], [3161, 7366, 0], [3194, 7371, 0], [3188, 7321, 0], [3193, 7313, 0], [3192, 7354, 0], [3192, 7326, 0], [3182, 7364, 0], [3181, 7325, 0], [3178, 7344, 0], [3193, 7287, 0], [3192, 7319, 0], [3192, 7345, 0], [3190, 7311, 0], [3188, 7342, 0], [3188, 7332, 0], [3200, 7322, 0], [3198, 7314, 0], [3176, 7368, 0], [3174, 7348, 0], [3173, 7343, 0], [3190, 7300, 0], [3188, 7357, 0], [3187, 7365, 0], [3172, 7322, 0], [3199, 7338, 0], [3196, 7368, 0], [3205, 7318, 0], [3187, 7348, 0], [3185, 7340, 0], [3184, 7323, 0], [3182, 7332, 0], [3172, 7367, 0], [3172, 7359, 0], [3162, 7377, 0], [3196, 7330, 0], [3191, 7412, 0], [3196, 7446, 0], [3196, 7445, 0], [3194, 7446, 0], [3194, 7447, 0], [3193, 7435, 0], [3193, 7402, 0], [3212, 7429, 0], [3209, 7409, 0], [3201, 7444, 0], [3199, 7420, 0], [3198, 7447, 0], [3185, 7392, 0], [3184, 7427, 0], [3188, 7449, 0], [3187, 7441, 0], [3184, 7388, 0], [3180, 7474, 0], [3177, 7450, 0], [3173, 7451, 0], [3217, 7461, 0], [3244, 7445, 0], [3225, 7450, 0], [3183, 7409, 0], [3182, 7463, 0], [3180, 7442, 0], [3202, 7451, 0], [3194, 7443, 0], [3193, 7459, 0], [3188, 7473, 0], [3183, 7398, 0], [3183, 7448, 0], [3183, 7436, 0], [3175, 7455, 0], [3170, 7456, 0], [3211, 7404, 0], [3211, 7407, 0], [3211, 7429, 0], [3195, 7391, 0], [3195, 7450, 0], [3194, 7421, 0], [3193, 7471, 0], [3185, 7475, 0], [3184, 7414, 0], [3184, 7394, 0], [3183, 7451, 0], [3182, 7392, 0], [3220, 7434, 0], [3182, 7421, 0], [3192, 7425, 0], [3192, 7393, 0], [3190, 7402, 0], [3190, 7387, 0], [3204, 7428, 0], [3202, 7413, 0], [3201, 7448, 0], [3201, 7433, 0], [3180, 7427, 0], [3181, 7401, 0], [3179, 7430, 0], [3199, 7406, 0], [3218, 7422, 0], [3214, 7410, 0], [3178, 7447, 0], [3178, 7457, 0], [3188, 7434, 0], [3199, 7401, 0], [3199, 7452, 0], [3199, 7425, 0], [3198, 7460, 0], [3175, 7483, 0], [3175, 7430, 0], [3175, 7476, 0], [3173, 7436, 0], [3221, 7436, 0], [3219, 7430, 0], [3209, 7431, 0], [3207, 7439, 0], [3197, 7401, 0], [3197, 7430, 0], [3197, 7408, 0], [3196, 7404, 0], [3190, 7404, 0], [3188, 7393, 0], [3186, 7461, 0], [3206, 7441, 0], [3167, 7447, 0], [3163, 7454, 0], [3162, 7451, 0], [3205, 7448, 0], [3205, 7419, 0], [3205, 7408, 0], [3204, 7432, 0], [3191, 7398, 0], [3192, 7449, 0], [3192, 7454, 0], [3201, 7384, 0], [3252, 7430, 0], [3252, 7432, 0], [3251, 7402, 0], [3263, 7407, 0], [3261, 7430, 0], [3244, 7424, 0], [3241, 7415, 0], [3305, 7387, 0], [3297, 7377, 0], [3293, 7378, 0], [3279, 7421, 0], [3265, 7403, 0], [3232, 7407, 0], [3199, 7390, 0], [3305, 7368, 0], [3245, 7434, 0], [3226, 7407, 0], [3223, 7392, 0], [3217, 7407, 0], [3306, 7382, 0], [3281, 7387, 0], [3246, 7417, 0], [3282, 7422, 0], [3279, 7417, 0], [3272, 7423, 0], [3292, 7366, 0], [3292, 7373, 0], [3289, 7392, 0], [3225, 7412, 0], [3220, 7403, 0], [3287, 7419, 0], [3285, 7383, 0], [3270, 7398, 0], [3265, 7404, 0], [3265, 7399, 0], [3303, 7378, 0], [3239, 7429, 0], [3237, 7411, 0], [3237, 7415, 0], [3262, 7414, 0], [3256, 7412, 0], [3303, 7393, 0], [3301, 7370, 0], [3242, 7423, 0], [3254, 7425, 0], [3253, 7415, 0], [3248, 7427, 0], [3300, 7382, 0], [3233, 7401, 0], [3226, 7431, 0], [3225, 7400, 0], [3298, 7374, 0], [3246, 7406, 0], [3243, 7408, 0], [3221, 7416, 0], [3202, 7388, 0], [3235, 7379, 0], [3236, 7362, 0], [3234, 7353, 0], [3233, 7354, 0], [3228, 7377, 0], [3227, 7374, 0], [3226, 7376, 0], [3216, 7352, 0], [3216, 7353, 0], [3212, 7380, 0], [3211, 7383, 0], [3210, 7361, 0], [3202, 7376, 0], [3203, 7378, 0], [3193, 7377, 0], [3255, 7384, 0], [3251, 7374, 0], [3249, 7375, 0], [3243, 7382, 0], [3283, 7361, 0], [3269, 7380, 0], [3266, 7379, 0], [3262, 7373, 0], [3230, 7380, 0], [3240, 7354, 0], [3265, 7386, 0], [3263, 7361, 0], [3261, 7379, 0], [3271, 7374, 0], [3270, 7383, 0], [3225, 7341, 0], [3224, 7384, 0], [3220, 7380, 0], [3221, 7376, 0], [3269, 7365, 0], [3219, 7351, 0], [3257, 7387, 0], [3253, 7372, 0], [3253, 7379, 0], [3234, 7370, 0], [3233, 7388, 0], [3231, 7349, 0], [3250, 7370, 0], [3217, 7360, 0], [3215, 7385, 0], [3213, 7365, 0], [3204, 7380, 0], [3197, 7376, 0], [3189, 7373, 0], [3247, 7352, 0], [3245, 7357, 0], [3244, 7363, 0], [3235, 7360, 0], [3234, 7344, 0], [3213, 7356, 0], [3300, 7361, 0], [3286, 7354, 0], [3212, 7379, 0], [3214, 7375, 0], [3235, 7383, 0], [3244, 7381, 0], [3241, 7385, 0], [3279, 7361, 0], [3229, 7392, 0], [3227, 7368, 0], [3210, 7340, 0], [3208, 7384, 0], [3207, 7363, 0], [3205, 7371, 0], [3279, 7370, 0], [3272, 7392, 0], [3226, 7372, 0], [3239, 7359, 0], [3239, 7349, 0], [3401, 7352, 0], [3390, 7379, 0], [3311, 7399, 0], [3374, 7404, 0], [3358, 7428, 0], [3355, 7397, 0], [3352, 7386, 0], [3390, 7366, 0], [3388, 7342, 0], [3384, 7380, 0], [3362, 7438, 0], [3397, 7373, 0], [3393, 7352, 0], [3400, 7366, 0], [3351, 7376, 0], [3349, 7412, 0], [3346, 7393, 0], [3340, 7376, 0], [3341, 7418, 0], [3329, 7374, 0], [3330, 7405, 0], [3363, 7418, 0], [3361, 7424, 0], [3360, 7381, 0], [3309, 7399, 0], [3307, 7367, 0], [3324, 7387, 0], [3312, 7370, 0], [3312, 7401, 0], [3344, 7384, 0], [3334, 7403, 0], [3333, 7372, 0], [3329, 7383, 0], [3328, 7404, 0], [3328, 7372, 0], [3326, 7391, 0], [3324, 7375, 0], [3323, 7404, 0], [3395, 7360, 0], [3393, 7356, 0], [3392, 7375, 0], [3322, 7381, 0], [3314, 7412, 0], [3312, 7384, 0], [3313, 7390, 0], [3313, 7375, 0], [3311, 7381, 0], [3466, 7333, 0], [3387, 7362, 0], [3387, 7368, 0], [3385, 7345, 0], [3323, 7399, 0], [3373, 7383, 0], [3372, 7351, 0], [3368, 7384, 0], [3367, 7379, 0], [3364, 7346, 0], [3364, 7395, 0], [3320, 7389, 0], [3316, 7365, 0], [3311, 7394, 0], [3420, 7309, 0], [3416, 7304, 0], [3411, 7325, 0], [3364, 7387, 0], [3351, 7388, 0], [3350, 7432, 0], [3319, 7398, 0], [3318, 7358, 0], [3318, 7387, 0], [3317, 7346, 0], [3345, 7374, 0], [3409, 7339, 0], [3402, 7359, 0], [3393, 7436, 0], [3421, 7429, 0], [3433, 7388, 0], [3427, 7401, 0], [3418, 7450, 0], [3410, 7405, 0], [3397, 7417, 0], [3384, 7427, 0], [3375, 7468, 0], [3369, 7425, 0], [3364, 7443, 0], [3388, 7400, 0], [3386, 7409, 0], [3385, 7437, 0], [3384, 7460, 0], [3383, 7422, 0], [3383, 7448, 0], [3380, 7390, 0], [3378, 7433, 0], [3375, 7445, 0], [3400, 7430, 0], [3398, 7403, 0], [3398, 7379, 0], [3396, 7414, 0], [3393, 7438, 0], [3392, 7458, 0], [3392, 7395, 0], [3391, 7451, 0], [3391, 7423, 0], [3375, 7456, 0], [3371, 7418, 0], [3485, 7386, 0], [3430, 7416, 0], [3426, 7424, 0], [3425, 7435, 0], [3425, 7398, 0], [3423, 7406, 0], [3420, 7431, 0], [3419, 7414, 0], [3417, 7447, 0], [3416, 7421, 0], [3414, 7453, 0], [3413, 7430, 0], [3412, 7404, 0], [3411, 7410, 0], [3406, 7417, 0], [3406, 7443, 0], [3404, 7454, 0], [3367, 7447, 0], [3366, 7429, 0], [3390, 7417, 0], [3390, 7443, 0], [3407, 7436, 0], [3405, 7363, 0], [3404, 7372, 0], [3403, 7459, 0], [3402, 7378, 0], [3403, 7367, 0], [3402, 7449, 0], [3400, 7384, 0], [3400, 7434, 0], [3389, 7420, 0], [3389, 7390, 0], [3388, 7395, 0], [3385, 7456, 0], [3384, 7429, 0], [3384, 7385, 0], [3381, 7455, 0], [3381, 7414, 0], [3380, 7441, 0], [3494, 7355, 0], [3491, 7341, 0], [3486, 7356, 0], [3478, 7347, 0], [3458, 7393, 0], [3379, 7417, 0], [3377, 7425, 0], [3376, 7413, 0], [3373, 7438, 0], [3372, 7429, 0], [3371, 7447, 0], [3369, 7434, 0], [3362, 7447, 0], [3428, 7412, 0], [3426, 7440, 0], [3424, 7378, 0], [3420, 7367, 0], [3417, 7408, 0], [3416, 7431, 0], [3414, 7446, 0], [3414, 7414, 0], [3413, 7442, 0], [3509, 7352, 0], [3412, 7457, 0], [3410, 7428, 0], [3410, 7451, 0], [3410, 7360, 0], [3407, 7368, 0], [3398, 7443, 0], [3396, 7398, 0], [3397, 7422, 0], [3394, 7430, 0], [3393, 7406, 0], [3519, 7379, 0], [3503, 7439, 0], [3504, 7429, 0], [3491, 7409, 0], [3459, 7425, 0], [3556, 7405, 0], [3555, 7405, 0], [3515, 7390, 0], [3510, 7478, 0], [3498, 7397, 0], [3496, 7411, 0], [3494, 7435, 0], [3548, 7395, 0], [3532, 7401, 0], [3519, 7412, 0], [3518, 7426, 0], [3511, 7403, 0], [3515, 7368, 0], [3510, 7382, 0], [3508, 7399, 0], [3500, 7438, 0], [3498, 7427, 0], [3490, 7420, 0], [3483, 7434, 0], [3476, 7415, 0], [3455, 7428, 0], [3540, 7414, 0], [3535, 7397, 0], [3532, 7414, 0], [3538, 7413, 0], [3538, 7408, 0], [3503, 7410, 0], [3498, 7420, 0], [3497, 7432, 0], [3515, 7395, 0], [3532, 7421, 0], [3530, 7386, 0], [3515, 7386, 0], [3517, 7414, 0], [3514, 7429, 0], [3564, 7402, 0], [3558, 7401, 0], [3553, 7393, 0], [3493, 7426, 0], [3489, 7413, 0], [3487, 7447, 0], [3483, 7418, 0], [3483, 7406, 0], [3553, 7407, 0], [3548, 7410, 0], [3481, 7408, 0], [3472, 7408, 0], [3525, 7425, 0], [3526, 7383, 0], [3511, 7421, 0], [3507, 7434, 0], [3472, 7418, 0], [3464, 7411, 0], [3459, 7421, 0], [3455, 7416, 0], [3524, 7420, 0], [3521, 7405, 0], [3521, 7375, 0], [3545, 7403, 0], [3542, 7397, 0], [3505, 7476, 0], [3503, 7425, 0], [3536, 7417, 0], [3519, 7398, 0], [3520, 7387, 0], [3547, 7488, 0], [3551, 7486, 0], [3560, 7521, 0], [3561, 7497, 0], [3573, 7522, 0], [3584, 7520, 0], [3547, 7465, 0], [3548, 7497, 0], [3549, 7473, 0], [3551, 7470, 0], [3550, 7479, 0], [3544, 7477, 0], [3517, 7465, 0], [3517, 7473, 0], [3518, 7497, 0], [3518, 7457, 0], [3522, 7508, 0], [3523, 7511, 0], [3523, 7478, 0], [3525, 7489, 0], [3525, 7471, 0], [3525, 7464, 0], [3525, 7495, 0], [3512, 7484, 0], [3515, 7489, 0], [3586, 7498, 0], [3589, 7529, 0], [3527, 7504, 0], [3527, 7454, 0], [3528, 7483, 0], [3528, 7460, 0], [3531, 7485, 0], [3531, 7500, 0], [3532, 7468, 0], [3533, 7475, 0], [3534, 7491, 0], [3536, 7496, 0], [3538, 7483, 0], [3538, 7488, 0], [3539, 7466, 0], [3540, 7503, 0], [3541, 7499, 0], [3544, 7471, 0], [3514, 7463, 0], [3537, 7476, 0], [3543, 7493, 0], [3546, 7503, 0], [3562, 7507, 0], [3517, 7482, 0], [3522, 7504, 0], [3532, 7457, 0], [3520, 7481, 0], [3521, 7471, 0], [3523, 7503, 0], [3524, 7460, 0], [3530, 7487, 0], [3531, 7460, 0], [3545, 7481, 0], [3547, 7500, 0], [3584, 7515, 0]];
+const GRID = {
+ "삼선동":{"독립점포증가":[6.5,83],"개업률":[27.7,85],"결제건수증가":[19.6,84],"2030변화p":[2.8,95],"매출증가":[34.8,93],"프랜차이즈비중":[18.8,14],"폐업률":[23.8,55],"점포":[58,64,71,74,76],"매출":[30.1,32.0,30.2,30.9,40.8]},
+ "용산2가동":{"독립점포증가":[16.5,92],"개업률":[17.7,48],"결제건수증가":[18.3,83],"2030변화p":[2.4,94],"매출증가":[44.7,95],"프랜차이즈비중":[11.2,5],"폐업률":[20.4,41],"점포":[51,59,65,70,74],"매출":[25.7,28.0,32.7,47.1,47.4]},
+ "가회동":{"독립점포증가":[9.1,85],"개업률":[13.1,26],"결제건수증가":[24.4,87],"2030변화p":[4.0,98],"매출증가":[62.1,95],"프랜차이즈비중":[10.1,4],"폐업률":[13.1,14],"점포":[58,73,78,80,84],"매출":[101.9,153.4,150.3,171.5,243.7]}
+};
+const ROWS=[["초기 방문자","가서 발견 (경로 B)"],["초기 추종자","후기·SNS를 보고 방문"],["주류 방문자","알고 나서 방문 (경로 A)"],["후기 유입자","이미 유명해진 곳을 소비"]];
+const fmt=(v,u,sign)=>(sign&&v>0?"+":"")+v.toFixed(1)+u;
+const shade=(p,inv)=>`rgba(197,138,82,${(((inv?100-p:p)/100)*0.62+0.08).toFixed(2)})`;
+const mrow=(label,val,pct,proxy)=>`<div><div class="mr"><span>${label}${proxy?'<span class="proxy">대용</span>':''}</span><b>${val}</b></div><div class="bl"><div class="bar"><i style="width:${pct}%"></i></div><em>${pct}</em></div></div>`;
+const cellH=(bg,inner)=>`<div class="cell" style="background:${bg}">${inner}</div>`;
+const emp=t=>`<div class="cell empty">${t}</div>`;
+const DZ=(cls,nm,src,chip)=>`<div class="cell dz ${cls}"><div class="nm">${nm}</div><div class="src">${src}</div><span class="chip">${chip}</span></div>`;
+const DESIGN=[
+ [DZ("none","측정 불가","SNS 이전에 발견하는 사람들","해당 없음"), DZ("calc","독립 커피 점포 증가율<br>커피 개업률","점포-행정동 · 분기","● 계산함"), DZ("none","뚜렷한 지표 없음","","해당 없음")],
+ [DZ("proxy","검색량 증가 (구글 트렌드)","네이버 데이터랩·인스타 해시태그는 미수집","◐ 대용"), DZ("proxy","커피 결제건수 증가율","추정매출-행정동 · 생활인구 대신 대용","◐ 대용"), DZ("calc","20~30대 매출 비중 변화","추정매출-행정동 · 분기","● 계산함")],
+ [DZ("proxy","유튜브 관련 영상 수","검색 상위 샘플의 연도별 수 · 언론은 미수집","◐ 대용"), DZ("miss","지하철 승하차 · 외국인 생활인구","열린데이터광장(파일 없음)","○ 미수집"), DZ("calc","커피 매출 증가율","추정매출-행정동 · 비교·결과 확인용","● 계산함")],
+ [DZ("miss","검색량 정점 · 포화","네이버 데이터랩","○ 미수집"), DZ("none","뚜렷한 지표 없음","","해당 없음"), DZ("calc","프랜차이즈 비중 · 폐업률","점포-행정동 · 게이트(낮을수록 안정)<br>임대료는 별도 출처 필요","● 계산함")]
+];
+const LEG_DESIGN='<span><i style="background:var(--leaf-bg);border-color:var(--leaf)"></i>계산함 4칸</span><span><i style="background:var(--latte);border-color:var(--crema)"></i>대용 3칸</span><span><i style="background:repeating-linear-gradient(135deg,#f6ecdb,#f6ecdb 4px,#f1e4cd 4px,#f1e4cd 8px);border-style:dashed"></i>미수집 2칸</span><span><i style="background:#e6dccb"></i>해당 없음 3칸</span><span style="color:var(--ink3)">네이버 검색량·인스타 해시태그·승하차·생활인구는 미수집</span>';
+const EX={
+ "삼선동":{gt:["신호 없음 (≈0)","한성대입구·삼선동 카페 검색량이 너무 적음"],yt:["’24→’25→’26: 5 → 15 → 14","조회수 중앙값 476 · 성북동 영상 일부 포함"]},
+ "용산2가동":{gt:["해방촌 카페 7.6 → 22.7 → 37.4","’24 → ’25 → ’26 상대지수"],yt:["’24→’25→’26: 10 → 5 → 15","조회수 중앙값 364 · 뚜렷한 증가는 2026년"]},
+ "가회동":{gt:["북촌(장소) 51 → 80","2021 → 2026 · ‘북촌 카페’는 변동이 큼"],yt:["’24→’25→’26: 5 → 21 → 25","조회수 중앙값 925"]}
+};
+const pxc=(title,main,sub)=>`<div class="cell" style="background:rgba(236,220,196,.85)"><div class="mr"><span>${title}<span class="proxy">대용</span></span></div><b style="font-family:var(--serif);font-size:13px;line-height:1.35">${main}</b><div class="small" style="font-size:11px;line-height:1.3">${sub}</div></div>`;
+const LEG_VAL='<span><i style="background:rgba(197,138,82,.85)"></i>막대·숫자 = 392개 동 중 백분위 (진할수록 높음)</span><span><i style="background:repeating-linear-gradient(135deg,#f3e9d9,#f3e9d9 4px,#efe2cd 4px,#efe2cd 8px)"></i>미수집 / 해당 없음</span><span>프랜차이즈·폐업률은 낮을수록 안정</span>';
+function renderGrid(n){
+  const head='<div></div><div class="h">01 · 안다</div><div class="h">02 · 간다</div><div class="h">03 · 산다</div>';
+  if(n==="지표 설계"){let h=head;ROWS.forEach((r,i)=>{h+=`<div class="rowl">${r[0]}<small>${r[1]}</small></div>`+DESIGN[i].join("")});document.getElementById("hm").innerHTML=h;document.getElementById("legend").innerHTML=LEG_DESIGN;return}
+  document.getElementById("legend").innerHTML=LEG_VAL;
+  const g=GRID[n]; let h=head;
+  const one=(l,k,u,s,inv,px)=>cellH(shade(g[k][1],inv),mrow(l,fmt(g[k][0],u,s),g[k][1],px));
+  const rows=[
+   [emp("측정 불가<br>(SNS 이전에 발견)"), cellH(shade(Math.round((g.독립점포증가[1]+g.개업률[1])/2)),mrow("독립 커피 점포 증가",fmt(g.독립점포증가[0],"%",1),g.독립점포증가[1])+mrow("커피 개업률",fmt(g.개업률[0],"%",0),g.개업률[1])), emp("지표 없음")],
+   [pxc("검색량 (구글 트렌드)",EX[n].gt[0],EX[n].gt[1]), one("커피 결제건수 증가","결제건수증가","%",1,0,1), one("20~30대 비중 변화","2030변화p","%p",1)],
+   [pxc("유튜브 관련 영상 수",EX[n].yt[0],EX[n].yt[1]), emp("미수집<br>지하철 승하차·외국인"), one("커피 매출 증가","매출증가","%",1)],
+   [emp("미수집"), emp("지표 없음"), cellH(shade(Math.round((g.프랜차이즈비중[1]+g.폐업률[1])/2),1),mrow("프랜차이즈 비중",fmt(g.프랜차이즈비중[0],"%",0),g.프랜차이즈비중[1])+mrow("폐업률",fmt(g.폐업률[0],"%",0),g.폐업률[1]))]
+  ];
+  ROWS.forEach((r,i)=>{h+=`<div class="rowl">${r[0]}<small>${r[1]}</small></div>`+rows[i].join("")});
+  document.getElementById("hm").innerHTML=h;
+}
+function tabs(id,fn,def,list){const box=document.getElementById(id);(list||Object.keys(GRID)).forEach(n=>{const b=document.createElement("button");b.textContent=n;b.setAttribute("aria-pressed",n===def);b.onclick=()=>{[...box.children].forEach(x=>x.setAttribute("aria-pressed",x===b));fn(n)};box.appendChild(b)})}
+tabs("gtabs",renderGrid,"지표 설계",["지표 설계","삼선동","용산2가동","가회동"]);renderGrid("지표 설계");
+
+function chart(n){
+  const g=GRID[n],yrs=[2021,2022,2023,2024,2025],W=640,H=270,L=40,R=46,T=26,B=30,mx=Math.max(...g.점포)*1.15,my=Math.max(...g.매출)*1.15,bw=(W-L-R)/5;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${n} 커피 점포 수와 매출 추이">`;
+  for(let i=0;i<=4;i++){const y=T+(H-T-B)*i/4;s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text class="ax" x="${L-6}" y="${y+4}" text-anchor="end">${Math.round(mx*(1-i/4))}</text><text class="ax" x="${W-R+6}" y="${y+4}">${Math.round(my*(1-i/4))}</text>`}
+  g.점포.forEach((v,i)=>{const h=(H-T-B)*v/mx,x=L+i*bw+bw*.2;s+=`<rect class="st${i==4?' last':''}" x="${x}" y="${H-B-h}" width="${bw*.6}" height="${h}" rx="5"/><text class="ax" x="${x+bw*.3}" y="${H-B-h-5}" text-anchor="middle">${v}</text>`});
+  const pts=g.매출.map((v,i)=>[L+i*bw+bw*.5,T+(H-T-B)*(1-v/my)]);
+  s+=`<polyline class="ln" points="${pts.map(p=>p.join(",")).join(" ")}"/>`;
+  pts.forEach((p,i)=>{s+=`<circle class="dt" cx="${p[0]}" cy="${p[1]}" r="4"/><text class="lb" x="${p[0]}" y="${p[1]-10}" text-anchor="middle">${g.매출[i]}</text>`});
+  yrs.forEach((y,i)=>{s+=`<text class="ax" x="${L+i*bw+bw*.5}" y="${H-10}" text-anchor="middle">${y}</text>`});
+  document.getElementById("chart").innerHTML=s+"</svg>";
+  document.getElementById("ctitle").textContent=n+" · 커피 점포 수와 매출 추이";
+}
+tabs("ctabs",chart,"삼선동");chart("삼선동");
+
+const VAL=[["성수2가3동",82,"y","+26%"],["성수2가1동",77,"y","+21%"],["서교동(홍대)",64,"n","+5%"],["성수1가2동",51,"n","−4%"],["연남동",37,"n","−11%"]];
+document.getElementById("vrows").innerHTML=VAL.map(([n,p,c,r])=>`<div class="vrow"><b>${n}</b><div class="vtrack"><i style="width:${p}%"></i><u style="left:75%"></u><s style="left:${p}%">${(p/100).toFixed(2)}</s></div><span class="badge ${c}">${c=="y"?"전환":"미전환"} · 23→25 매출 ${r}</span></div>`).join("");
+
+/* map: 상권 centroid, units = 60 m */
+(function(){
+  const W=406,H=350,pad=14,xs=PTS.map(p=>p[0]),ys=PTS.map(p=>p[1]);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys),k=Math.min((W-2*pad)/(x1-x0),(H-2*pad)/(y1-y0));
+  const ox=(W-(x1-x0)*k)/2,oy=(H-(y1-y0)*k)/2,X=v=>ox+(v-x0)*k,Y=v=>H-(oy+(v-y0)*k);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="서울 지도: 추천 상권 3곳의 위치"><rect width="${W}" height="${H}" rx="10" fill="#f1e5d1"/>`;
+  PTS.filter(p=>p[2]==0).forEach(p=>{s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="1.9" fill="#d3bc98"/>`});
+  PTS.filter(p=>p[2]==4).forEach(p=>{s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="3" fill="none" stroke="#9a6232" stroke-width="1.3"/>`});
+  const lab=(x,y,t,a,dx,dy,c)=>`<text x="${X(x/60)+dx}" y="${Y(y/60)+dy}" text-anchor="${a}" style="font:700 11.5px 'Noto Sans KR',sans-serif;fill:${c||'#2a1c13'};paint-order:stroke;stroke:#f1e5d1;stroke-width:3.5px">${t}</text>`;
+  s+=lab(193000,450400,"홍대·연남","end",-9,-8,"#9a6232")+lab(204400,449500,"성수","start",9,14,"#9a6232");
+  const P=[[1,200722,454401,"삼선동","start",11,4],[2,198682,449528,"용산2가동","start",11,4],[3,198741,453290,"가회동","end",-11,4]];
+  P.forEach(([n,x,y,t,a,dx,dy])=>{const cx=X(x/60),cy=Y(y/60);s+=`<circle cx="${cx}" cy="${cy}" r="9" fill="#c58a52" opacity=".35"/><circle cx="${cx}" cy="${cy}" r="6.5" fill="#2a1c13"/><text x="${cx}" y="${cy+3.8}" text-anchor="middle" style="font:900 10px 'Noto Serif KR',serif;fill:#f6efe4">${n}</text>`+lab(x,y,t,a,dx,dy)});
+  const bar=5000/60*k; s+=`<g transform="translate(${W-pad-bar},${H-14})"><line x1="0" x2="${bar}" y1="0" y2="0" stroke="#5b4636" stroke-width="2"/><text x="${bar/2}" y="-5" text-anchor="middle" style="font:500 10px sans-serif;fill:#5b4636">5 km</text></g>`;
+  s+=`<g transform="translate(${W-pad-10},${pad+6})"><path d="M0 -8 L5 6 L0 3 L-5 6 Z" fill="#5b4636"/><text y="19" text-anchor="middle" style="font:700 10px sans-serif;fill:#5b4636">N</text></g>`;
+  document.getElementById("map").innerHTML=s+"</svg>";
+})();
+
+/* deck */
+const slides=[...document.querySelectorAll(".slide")],deck=document.getElementById("deck"),pg=document.getElementById("pg"),prog=document.getElementById("prog");let cur=0;
+function fit(){document.documentElement.style.setProperty("--s",Math.min(innerWidth/1280,innerHeight/720))}
+addEventListener("resize",fit);fit();
+function show(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle("on",j===cur));pg.textContent=(cur+1)+" / "+slides.length;prog.style.width=((cur+1)/slides.length*100)+"%";history.replaceState(null,"","#"+(cur+1))}
+document.getElementById("prev").onclick=()=>show(cur-1);document.getElementById("next").onclick=()=>show(cur+1);
+document.querySelectorAll("[data-go]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();show(+a.dataset.go)}));
+addEventListener("keydown",e=>{if(e.target.tagName==="BUTTON"&&!["ArrowRight","ArrowLeft"].includes(e.key))return;if(["ArrowRight","ArrowDown","PageDown"," "].includes(e.key)){e.preventDefault();show(cur+1)}else if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();show(cur-1)}else if(e.key==="Home")show(0);else if(e.key==="End")show(slides.length-1);else if(e.key==="f"||e.key==="F"){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}});
+let tx=null;addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});addEventListener("touchend",e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)show(cur+(d<0?1:-1));tx=null});
+const h=parseInt(location.hash.slice(1));show(h>=1&&h<=slides.length?h-1:0);
+</script>
+</body>
+</html>
